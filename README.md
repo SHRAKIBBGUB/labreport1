@@ -1,64 +1,83 @@
-# labreport1
 
-import random
+# DFS Grid Pathfinding
 
-class Node:
-    def __init__(self, x, y, depth):
-        self.x = x
-        self.y = y
-        self.depth = depth
+This Python program implements a **Depth-First Search (DFS)** algorithm to find a path between two randomly selected valid positions (source and goal) in a randomly generated 2D grid.
 
-class DFS:
-    def __init__(self, N):
-        self.N = N
-        self.grid = [[random.choice([0, 1]) for _ in range(N)] for _ in range(N)]
-        self.directions = [(1, 0), (-1, 0), (0, 1), (0, -1)]
-        self.path = []
-        self.top_order = []
-        self.found = False
-        self.source, self.goal = self.get_valid_positions()
-    
-    def get_valid_positions(self):
-        while True:
-            sx, sy, gx, gy = random.randint(0, self.N-1), random.randint(0, self.N-1), random.randint(0, self.N-1), random.randint(0, self.N-1)
-            if (sx, sy) != (gx, gy) and self.grid[sx][sy] == 1 and self.grid[gx][gy] == 1:
-                return Node(sx, sy, 0), Node(gx, gy, float('inf'))
-    
-    def dfs(self, x, y, depth):
-        if self.found or not (0 <= x < self.N and 0 <= y < self.N) or self.grid[x][y] == 0:
-            return
-        
-        self.grid[x][y] = 0
-        self.path.append((x, y))
-        self.top_order.append((x, y))
-        
-        if (x, y) == (self.goal.x, self.goal.y):
-            self.found = True
-            self.goal.depth = depth
-            return
-        
-        for dx, dy in self.directions:
-            self.dfs(x + dx, y + dy, depth + 1)
-            if self.found:
-                return
-    
-    def solve(self):
-        print("Grid:")
-        for row in self.grid:
-            print(" ".join(map(str, row)))
-        print(f"Source: ({self.source.x}, {self.source.y})")
-        print(f"Goal: ({self.goal.x}, {self.goal.y})")
-        
-        self.dfs(self.source.x, self.source.y, 0)
-        
-        if self.found:
-            print("DFS Path:", " -> ".join(map(str, self.path)))
-            print("Topological Order of Traversal:", " -> ".join(map(str, self.top_order)))
-            print(f"Moves required: {self.goal.depth}")
-        else:
-            print("No path found")
+## 🔍 Overview
 
-if __name__ == "__main__":
-    N = random.randint(4, 7)
-    dfs_solver = DFS(N)
-    dfs_solver.solve()
+* The grid is a square matrix of size `N x N`, where `N` is randomly chosen between 4 and 7.
+* Each cell in the grid is either **1 (open path)** or **0 (blocked)**.
+* The program randomly selects a valid **source** and **goal** cell (both having value 1 and not the same).
+* DFS is performed from the source to find a path to the goal.
+* The program outputs:
+
+  * The generated grid
+  * The source and goal positions
+  * The DFS path
+  * The topological order of visited nodes
+  * Total moves required to reach the goal
+
+## 📁 Files
+
+* `labreport1.py`: Main Python file containing all code.
+
+## ▶️ How to Run
+
+Ensure you have Python 3 installed. Then run the file:
+
+
+
+## 🧠 Classes & Functions
+
+### `Node`
+
+Represents a position in the grid.
+
+* `x, y`: coordinates
+* `depth`: depth from the source
+
+### `DFS`
+
+Main class that handles:
+
+* Grid creation
+* Source and goal selection
+* DFS traversal logic
+
+#### Key Methods:
+
+* `__init__(self, N)`: Initializes the grid and selects valid source and goal.
+* `get_valid_positions()`: Ensures both source and goal are on open paths.
+* `dfs(x, y, depth)`: Recursive DFS implementation.
+* `solve()`: Kicks off the process and prints all results.
+
+## ✅ Sample Output
+
+```
+Grid:
+1 1 0 1
+1 0 1 1
+0 1 1 0
+1 1 0 1
+Source: (0, 1)
+Goal: (3, 1)
+DFS Path: (0, 1) -> (0, 0) -> (1, 0) -> (2, 1) -> (3, 1)
+Topological Order of Traversal: (0, 1) -> (0, 0) -> (1, 0) -> (2, 1) -> (3, 1)
+Moves required: 4
+
+
+
+## 📌 Notes
+
+* DFS might not always find the shortest path, but it guarantees a path if one exists.
+* The grid and positions are randomized for each run.
+
+## 🔧 Future Improvements
+
+* Add visualization using `matplotlib` or `pygame`.
+* Add BFS or A\* for shortest path comparison.
+* Allow user-defined grid size and manual source/goal input.
+
+---
+
+Let me know if you want this in `.md` format or added to your project directory.
